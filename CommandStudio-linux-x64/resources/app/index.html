@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>CommandStudio</title>
+
+<link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="vendor/codemirror/theme/lesser-dark.css">
+<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
+
+<link rel="stylesheet" href="css/app.css">
+<link rel="shortcut icon" href="img/icon.png">
+
+<script src="vendor/requirejs/require.js" data-main="js/main.js"></script>
+
+</head>
+<body>
+
+<div class="ui-toolbar clearfix disable-select">
+  <div class="ui-dropdown ui-toolbar-item">
+    <span class="ui-dropdown-label"><i class="fa fa-file"></i> Project</span>
+    <div class="ui-dropdown-hover">
+      <div class="ui-dropdown-item ui-action" data-command="project-new">New Project</div>
+      <div class="ui-dropdown-item ui-action" data-command="project-import">Import Project</div>
+      <div class="ui-dropdown-item ui-action" data-command="project-export">Export Project</div>
+      <div class="ui-dropdown-separator"></div>
+      <div class="ui-dropdown-item ui-action" data-command="file-new">New File</div>
+      <div class="ui-dropdown-item ui-action" data-command="file-rename">Rename File</div>
+      <div class="ui-dropdown-item ui-action" data-command="file-delete">Delete File</div>
+    </div>
+  </div>
+  <div class="ui-toolbar-separator"></div>
+  <span class="ui-toolbar-item ui-action" data-command="editor-undo"><i class="fa fa-undo"></i> Undo</span>
+  <span class="ui-toolbar-item ui-action" data-command="editor-redo"><i class="fa fa-repeat"></i> Repeat</span>
+  <div class="ui-toolbar-separator"></div>
+  <span class="ui-toolbar-item ui-action" data-command="compile-file"><i class="fa fa-first-order"></i> Compile</span>
+  <div class="ui-toolbar-right">
+    <span class="ui-toolbar-version">CommandStudio v0.1-alpha</span>
+    <span class="ui-toolbar-item ui-action" data-command="app-help"><i class="fa fa-book"></i> Manual</span>
+    <span class="ui-toolbar-item ui-action" data-command="app-about"><i class="fa fa-info-circle"></i> About</span>
+  </div>
+</div>
+
+<div class="ui-app">
+  <div class="ui-filelist disable-select"></div>
+  <div class="ui-editor"></div>
+</div>
+
+<textarea id="output" rows="10" class="ui-output"></textarea>
+
+<div class="popin-container">
+  <div class="popin"></div>
+</div>
+
+<div class="popin-template" data-template="prompt">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    <span class="e-title"></span>
+  </div>
+  <div class="popin-content">
+    <label for="popin-input" class="label e-label"></label>
+    <input type="text" class="input-text popin-focus e-input on-key" id="popin-input" data-action="confirm">
+    <div class="input-notice e-notice"></div>
+    <div class="popin-buttons">
+      <button class="button button-main on-click" data-action="confirm"><i class="fa fa-check"></i> Ok</button>
+      <button class="button on-click" data-action="close"><i class="fa fa-times"></i> Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="popin-template" data-template="alert">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    <span class="e-title"></span>
+  </div>
+  <div class="popin-content">
+    <p class="e-text"></p>
+    <div class="popin-buttons">
+      <button class="button button-main on-click" data-action="close"><i class="fa fa-check"></i> Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="popin-template" data-template="confirm">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    <span class="e-title"></span>
+  </div>
+  <div class="popin-content">
+    <p class="e-text"></p>
+    <div class="popin-buttons">
+      <button class="button button-main on-click" data-action="confirm"><i class="fa fa-check"></i> Ok</button>
+      <button class="button on-click" data-action="close"><i class="fa fa-times"></i> Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="popin-template" data-template="download">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    <span class="e-title"></span>
+  </div>
+  <div class="popin-content">
+    <p class="e-text"></p>
+    <div class="popin-buttons">
+      <a href="" class="button button-main e-link" download=""><i class="fa fa-download"></i> Download</a>
+      <button class="button on-click" data-action="close"><i class="fa fa-times"></i> Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="popin-template" data-template="about">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    About
+  </div>
+  <div class="popin-content">
+    <div class="about">
+      <div class="about-name">CommandStudio</div>
+      <div class="about-version">v0.1-alpha</div>
+      <div class="about-by">Made with <i class="fa fa-heart"></i> by <a href="http://monsieurtouf.fr/youtube" target="_blank">Marcantouf</a></div>
+      <p class="about-credits">
+        <strong>Credits</strong><br>
+        Initial idea strongly inspired by <em>tossha</em> and his <a href="https://youtu.be/q-l0Q5lhm6Q" target="_blank">Redstone Programming Language</a>
+        <br>Ported to Desktop using <a target="_blank" href="http://electron.atom.io">Electron</a> by HeyItsShuga
+      </p>
+    </div>
+    <div class="popin-buttons">
+      <button class="button button-main on-click" data-action="close"><i class="fa fa-check"></i> Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="popin-template" data-template="help">
+  <div class="popin-header">
+    <div class="popin-exit on-click" data-action="close">&times;</div>
+    Manual
+  </div>
+  <div class="popin-content">
+    <div style="height:500px;width:500px" class="help">
+      <iframe src="manual/index.html" width=100% height=100%></iframe>
+    </div>
+    <div class="popin-buttons">
+      <button class="button button-main on-click" data-action="close"><i class="fa fa-check"></i> Ok</button>
+    </div>
+  </div>
+</div>
+
+
+
+<input type="file" class="ui-fileInput">
+
+</body>
+</html>
